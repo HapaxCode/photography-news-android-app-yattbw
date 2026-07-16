@@ -9,11 +9,13 @@ Application web installable (PWA) qui réunit les 10 derniers articles de :
 
 ## Utilisation
 
-1. Héberger ce dépôt sur un serveur HTTPS statique — par exemple en activant GitHub Pages sur ce dépôt (Settings → Pages → Deploy from branch `main` / `root`) : l'app sera disponible sur `https://hapaxcode.github.io/photography-news-android-app-yattbw/`.
+Un workflow GitHub Actions (`.github/workflows/deploy-pages.yml`) déploie automatiquement l'app sur GitHub Pages à chaque push sur `main`.
+
+1. **Une seule fois** : dans ce dépôt, aller sur **Settings → Pages → Build and deployment → Source**, choisir **"GitHub Actions"** (au lieu de "Deploy from a branch"). Le workflow se déclenche alors automatiquement et l'app devient disponible sur `https://hapaxcode.github.io/photography-news-android-app-yattbw/`.
 2. Ouvrir cette URL avec Chrome sur Android.
 3. Chrome propose automatiquement "Ajouter à l'écran d'accueil" / "Installer l'application" (ou via le bouton "Installer" dans l'en-tête de l'app) : une fois installée, l'app se lance en plein écran comme une app native.
 
-L'application fonctionne aussi simplement dans un navigateur, sans installation.
+L'application fonctionne aussi simplement dans un navigateur, sans installation. Chaque nouveau push sur `main` redéploie automatiquement (onglet **Actions** du dépôt pour suivre les déploiements).
 
 ## Fonctionnement technique
 
