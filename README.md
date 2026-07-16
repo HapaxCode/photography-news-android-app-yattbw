@@ -11,11 +11,14 @@ Application web installable (PWA) qui réunit les 10 derniers articles de :
 
 Un workflow GitHub Actions (`.github/workflows/deploy-pages.yml`) déploie automatiquement l'app sur GitHub Pages à chaque push sur `main`.
 
-1. **Une seule fois** : dans ce dépôt, aller sur **Settings → Pages → Build and deployment → Source**, choisir **"GitHub Actions"** (au lieu de "Deploy from a branch"). Le workflow se déclenche alors automatiquement et l'app devient disponible sur `https://hapaxcode.github.io/photography-news-android-app-yattbw/`.
-2. Ouvrir cette URL avec Chrome sur Android.
-3. Chrome propose automatiquement "Ajouter à l'écran d'accueil" / "Installer l'application" (ou via le bouton "Installer" dans l'en-tête de l'app) : une fois installée, l'app se lance en plein écran comme une app native.
+1. **Une seule fois** : dans ce dépôt, aller sur **Settings → Pages → Build and deployment → Source**, choisir **"GitHub Actions"** (au lieu de "Deploy from a branch"). Ce réglage doit être fait manuellement depuis l'interface GitHub : le jeton utilisé par le workflow n'a pas le droit de créer le site Pages lui-même (seule une action humaine dans les Settings le peut), il peut seulement déployer une fois le site créé.
+2. Une fois ce réglage fait, relancer le workflow (onglet **Actions** → "Deploy GitHub Pages" → "Run workflow", ou repousser un commit) : l'app devient disponible sur `https://hapaxcode.github.io/photography-news-android-app-yattbw/`.
+3. Ouvrir cette URL avec Chrome sur Android.
+4. Chrome propose automatiquement "Ajouter à l'écran d'accueil" / "Installer l'application" (ou via le bouton "Installer" dans l'en-tête de l'app) : une fois installée, l'app se lance en plein écran comme une app native.
 
-L'application fonctionne aussi simplement dans un navigateur, sans installation. Chaque nouveau push sur `main` redéploie automatiquement (onglet **Actions** du dépôt pour suivre les déploiements).
+L'application fonctionne aussi simplement dans un navigateur, sans installation. Une fois Pages activé, chaque nouveau push sur `main` redéploie automatiquement (onglet **Actions** du dépôt pour suivre les déploiements).
+
+⚠️ Ce dépôt est actuellement **privé** : les dépôts privés peuvent utiliser GitHub Pages (déploiement via Actions), mais le site publié reste accessible publiquement par son URL dès qu'il est activé, quelle que soit la visibilité du dépôt (sauf plan GitHub Pro/Team/Enterprise avec restriction d'accès activée).
 
 ## Fonctionnement technique
 
