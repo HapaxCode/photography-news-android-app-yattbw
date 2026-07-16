@@ -1,0 +1,20 @@
+{
+  "name": "Photo News — Actus Photographie",
+  "short_name": "Photo News",
+  "description": "Les 10 derniers articles de L'Œil de la photographie, Fisheye Magazine, Polka Magazine et LensCulture, réunis dans une seule galerie.",
+  "id": "/photo-news/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14101e",
+  "theme_color": "#14101e",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["photo", "news", "magazines"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

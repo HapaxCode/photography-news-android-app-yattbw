@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Photo News — Actus Photographie</title>
+<meta name="description" content="Les 10 derniers articles de L'Œil de la photographie, Fisheye Magazine, Polka Magazine et LensCulture, réunis dans une seule galerie.">
+<meta name="theme-color" content="#14101e">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Photo News">
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div class="header-top">
+    <div class="brand">
+      <img class="brand-icon" src="./icons/icon-192.png" alt="" width="36" height="36">
+      <div>
+        <h1>Photo News</h1>
+        <p class="status-line" id="statusLine"></p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="installBtn" class="icon-btn" hidden title="Installer l'application">Installer</button>
+      <button id="refreshBtn" class="icon-btn refresh" title="Actualiser">↻</button>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer class="app-footer">
+  <p>Agrégateur non officiel des actualités photo de
+    <a href="https://www.loeildelaphotographie.com/" target="_blank" rel="noopener noreferrer">L'Œil de la photographie</a>,
+    <a href="https://www.fisheyeimmersive.com/" target="_blank" rel="noopener noreferrer">Fisheye Magazine</a>,
+    <a href="https://www.polkagalerie.com/" target="_blank" rel="noopener noreferrer">Polka Magazine</a> et
+    <a href="https://www.lensculture.com/" target="_blank" rel="noopener noreferrer">LensCulture</a>.
+    Chaque article renvoie vers le site d'origine.</p>
+</footer>
+
+<script src="./js/feeds.js"></script>
+<script src="./js/app.js"></script>
+</body>
+</html>
