@@ -27,6 +27,12 @@ L'application fonctionne aussi simplement dans un navigateur, sans installation.
 - Les 10 derniers articles de chaque source sont mis en cache dans `localStorage` : l'app affiche instantanément la dernière version connue puis se rafraîchit en arrière-plan.
 - Un service worker (`service-worker.js`) met seulement en cache l'app shell (HTML/CSS/JS/icônes) pour un lancement hors-ligne ; les images d'articles et les appels aux flux ne sont pas interceptés par le service worker.
 
-## Point d'attention
+## Sources et flux
 
-Les URL de flux RSS candidates (dans `js/feeds.js`) ont été renseignées à partir des schémas WordPress usuels de ces sites, mais n'ont pas pu être vérifiées en direct depuis l'environnement où l'app a été générée (accès réseau sortant restreint). En particulier, la disponibilité d'un flux RSS public pour LensCulture n'est pas garantie. Si une source affiche "flux momentanément indisponible", vérifiez/ajustez `feedCandidates` pour cette source dans `js/feeds.js`.
+Les URL de flux sont configurées dans `js/feeds.js` (champ `feedCandidates` de chaque source, essayées dans l'ordre jusqu'à ce que l'une réponde).
+
+- **L'Œil de la photographie** et **Fisheye** : flux RSS natifs des sites.
+- **LensCulture** : flux Flipboard officiel (`/feeds/flipboard.rss`).
+- **Polka** : le site `polkagalerie.com` n'expose pas de flux RSS natif. L'app retombe donc sur **Google Actualités** filtré sur le domaine (`site:polkagalerie.com`). Conséquence : pour cette source uniquement, les liens passent par une redirection Google et les images de couverture sont souvent absentes (visuel générique sur la carte). Si Polka publie un jour un vrai flux RSS, ajoutez-le en tête de ses `feedCandidates` : il sera automatiquement préféré.
+
+Si une source affiche « flux momentanément indisponible », ajustez ses `feedCandidates` dans `js/feeds.js`.

@@ -32,8 +32,14 @@ const SOURCES = [
     site: "https://www.polkagalerie.com/",
     accent: "#e2483d",
     feedCandidates: [
+      // Polka n'expose pas de flux RSS natif. On tente d'abord les emplacements
+      // habituels (au cas où un flux serait ajouté un jour, il serait préféré)…
       "https://www.polkagalerie.com/feed/",
       "https://www.polkagalerie.com/feed",
+      // …puis on retombe sur Google Actualités filtré sur le domaine polkagalerie.com.
+      // Compromis assumé : les liens passent par une redirection Google et les images
+      // de couverture sont généralement absentes (carte avec visuel générique).
+      "https://news.google.com/rss/search?q=site:polkagalerie.com&hl=fr&gl=FR&ceid=FR:fr",
     ],
   },
   {
@@ -43,6 +49,7 @@ const SOURCES = [
     site: "https://www.lensculture.com/",
     accent: "#3aa0ff",
     feedCandidates: [
+      "https://www.lensculture.com/feeds/flipboard.rss",
       "https://www.lensculture.com/feed",
       "https://www.lensculture.com/feed.xml",
       "https://www.lensculture.com/feed/latest",
