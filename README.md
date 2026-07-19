@@ -6,6 +6,7 @@ Application web installable (PWA) qui réunit les 10 derniers articles de :
 - [Fisheye Magazine](https://www.fisheyeimmersive.com/)
 - [Polka Magazine](https://www.polkagalerie.com/)
 - [LensCulture](https://www.lensculture.com/)
+- [Street Photography France](https://streetphotographyfrance.fr/)
 
 ## Utilisation
 
@@ -31,7 +32,7 @@ L'application fonctionne aussi simplement dans un navigateur, sans installation.
 
 Les URL de flux sont configurées dans `js/feeds.js` (champ `feedCandidates` de chaque source, essayées dans l'ordre jusqu'à ce que l'une réponde).
 
-- **L'Œil de la photographie** et **Fisheye** : flux RSS natifs des sites.
+- **L'Œil de la photographie**, **Fisheye** et **Street Photography France** : flux RSS natifs des sites.
 - **LensCulture** : flux Flipboard officiel (`/feeds/flipboard.rss`).
 - **Polka** : le site `polkagalerie.com` n'expose pas de flux RSS natif. L'app retombe donc sur **Google Actualités** filtré sur le domaine (`site:polkagalerie.com`). Conséquence : pour cette source uniquement, les liens passent par une redirection Google et les images de couverture sont souvent absentes (visuel générique sur la carte). Si Polka publie un jour un vrai flux RSS, ajoutez-le en tête de ses `feedCandidates` : il sera automatiquement préféré.
 

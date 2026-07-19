@@ -56,6 +56,16 @@ const SOURCES = [
       "https://www.lensculture.com/rss",
     ],
   },
+  {
+    id: "streetfr",
+    name: "Street Photography France",
+    shortName: "Street FR",
+    site: "https://streetphotographyfrance.fr/",
+    accent: "#2ec4b6",
+    feedCandidates: [
+      "https://streetphotographyfrance.fr/feed/",
+    ],
+  },
 ];
 
 const ARTICLES_PER_SOURCE = 10;
