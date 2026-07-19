@@ -95,11 +95,43 @@ function stripHtml(html) {
   return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
 }
 
+// Rejette les URLs inutilisables : vides, placeholders lazy-load en data: URI,
+// ou pixels de tracking (les vraies images ont une extension ou un vrai chemin).
+function isUsableImageUrl(url) {
+  if (!url) return false;
+  const u = url.trim();
+  if (!u) return false;
+  if (u.startsWith("data:")) return false;
+  return /^https?:\/\//i.test(u) || u.startsWith("//") || u.startsWith("/");
+}
+
+// Prend la première URL d'un attribut srcset ("url1 1x, url2 2x" ou "url1 320w, …").
+function firstFromSrcset(srcset) {
+  if (!srcset) return null;
+  const first = srcset.split(",")[0]?.trim().split(/\s+/)[0];
+  return first || null;
+}
+
+// Cherche la première vraie image dans un fragment HTML. Gère le lazy-load
+// WordPress (src = placeholder base64, vraie URL dans data-src / srcset).
 function firstImageFromHtml(html) {
   if (!html) return null;
   const doc = new DOMParser().parseFromString(html, "text/html");
-  const img = doc.querySelector("img[src]");
-  return img ? img.getAttribute("src") : null;
+  const imgs = doc.querySelectorAll("img");
+  for (const img of imgs) {
+    const candidates = [
+      img.getAttribute("data-src"),
+      img.getAttribute("data-lazy-src"),
+      img.getAttribute("data-orig-file"),
+      img.getAttribute("data-large-file"),
+      firstFromSrcset(img.getAttribute("data-srcset")),
+      firstFromSrcset(img.getAttribute("srcset")),
+      img.getAttribute("src"),
+    ];
+    const found = candidates.find(isUsableImageUrl);
+    if (found) return found.trim();
+  }
+  return null;
 }
 
 function excerptFrom(text, max = 160) {
@@ -113,8 +145,7 @@ function normalizeFromRss2Json(json, source) {
   if (!json || json.status !== "ok" || !Array.isArray(json.items)) return [];
   return json.items.slice(0, ARTICLES_PER_SOURCE).map((item) => {
     const image =
-      item.thumbnail ||
-      item.enclosure?.link ||
+      [item.thumbnail, item.enclosure?.link].find(isUsableImageUrl) ||
       firstImageFromHtml(item.content || item.description) ||
       null;
     return {
@@ -144,12 +175,19 @@ function normalizeFromXml(xmlText, source) {
         item.querySelector("description")?.textContent ||
         "";
       const enclosure = item.querySelector("enclosure[url]");
+      const enclosureUrl =
+        enclosure && /image/.test(enclosure.getAttribute("type") || "image")
+          ? enclosure.getAttribute("url")
+          : null;
       const mediaContent =
         item.getElementsByTagName("media:content")[0]?.getAttribute("url") ||
         item.getElementsByTagName("media:thumbnail")[0]?.getAttribute("url");
+      // WordPress expose souvent l'image à la une dans <content:encoded> plutôt que
+      // dans <description> (l'extrait) : on scanne les deux.
+      const contentEncoded = item.getElementsByTagName("content:encoded")[0]?.textContent || "";
       const image =
-        (enclosure && /image/.test(enclosure.getAttribute("type") || "image") && enclosure.getAttribute("url")) ||
-        mediaContent ||
+        [enclosureUrl, mediaContent].find(isUsableImageUrl) ||
+        firstImageFromHtml(contentEncoded) ||
         firstImageFromHtml(description) ||
         null;
 
