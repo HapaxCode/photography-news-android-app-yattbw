@@ -140,6 +140,59 @@ function excerptFrom(text, max = 160) {
   return clean.slice(0, max).replace(/\s+\S*$/, "") + "…";
 }
 
+// Extrait l'image de partage (og:image / twitter:image) d'une page HTML complète.
+function ogImageFromHtml(html) {
+  if (!html) return null;
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const selectors = [
+    'meta[property="og:image"]',
+    'meta[property="og:image:url"]',
+    'meta[name="og:image"]',
+    'meta[name="twitter:image"]',
+    'meta[name="twitter:image:src"]',
+    'meta[property="twitter:image"]',
+  ];
+  for (const sel of selectors) {
+    const content = doc.querySelector(sel)?.getAttribute("content");
+    if (isUsableImageUrl(content)) return content.trim();
+  }
+  return null;
+}
+
+// Va chercher l'og:image d'un article quand son flux ne fournit pas d'image.
+// Récupère la page via un proxy CORS et lit la balise meta og:image.
+async function fetchOgImage(articleUrl, timeoutMs = 9000) {
+  if (!articleUrl) return null;
+  try {
+    // Les liens Polka passent par une redirection Google Actualités : inutile d'y
+    // chercher une og:image (on tomberait sur la page de redirection Google).
+    if (new URL(articleUrl).host.endsWith("news.google.com")) return null;
+  } catch {
+    return null;
+  }
+
+  const proxies = [
+    (u) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
+    (u) => "https://corsproxy.io/?url=" + encodeURIComponent(u),
+  ];
+  for (const proxy of proxies) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(proxy(articleUrl), { signal: controller.signal });
+      if (res.ok) {
+        const image = ogImageFromHtml(await res.text());
+        if (image) return image;
+      }
+    } catch {
+      /* proxy suivant */
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  return null;
+}
+
 // --- Normalisation depuis la réponse rss2json ---
 function normalizeFromRss2Json(json, source) {
   if (!json || json.status !== "ok" || !Array.isArray(json.items)) return [];

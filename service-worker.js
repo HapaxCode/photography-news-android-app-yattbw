@@ -1,4 +1,4 @@
-const CACHE_VERSION = "photo-news-v4";
+const CACHE_VERSION = "photo-news-v5";
 const APP_SHELL = [
   "./",
   "./index.html",

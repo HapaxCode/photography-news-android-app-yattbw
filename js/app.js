@@ -297,6 +297,8 @@ async function loadSource(source, { force = false } = {}) {
   if (items.length) {
     setCachedSource(source.id, items);
     state.bySource[source.id] = { items, status: "ok", fetchedAt: Date.now() };
+    render();
+    enrichMissingImages(source); // en arrière-plan, ne bloque pas l'affichage
   } else {
     const cached = getCachedSource(source.id);
     state.bySource[source.id] = {
@@ -304,8 +306,29 @@ async function loadSource(source, { force = false } = {}) {
       status: "error",
       fetchedAt: cached ? cached.fetchedAt : null,
     };
+    render();
   }
-  render();
+}
+
+// Pour les articles dont le flux ne fournit aucune image, va chercher l'og:image
+// de la page. Les vignettes apparaissent au fur et à mesure ; le cache est mis à jour.
+async function enrichMissingImages(source) {
+  const entry = state.bySource[source.id];
+  if (!entry || !entry.items) return;
+  const missing = entry.items.filter((it) => !it.image && it.link);
+  if (!missing.length) return;
+
+  let changed = false;
+  for (const item of missing) {
+    if (state.bySource[source.id] !== entry) return; // un refresh a remplacé les données
+    const og = await fetchOgImage(item.link);
+    if (og) {
+      item.image = og;
+      changed = true;
+      render();
+    }
+  }
+  if (changed) setCachedSource(source.id, entry.items);
 }
 
 function hydrateDates(items) {
